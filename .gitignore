@@ -11,4 +11,5 @@ yarn-error.log
 /.idea
 /.vscode
 composer.lock
+/resources/lang/en.json
 
