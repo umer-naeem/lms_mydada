@@ -157,6 +157,32 @@ class StudentController extends Controller
             ]];
         });
 
+        // Calculate overall progress data for graph
+        $progressData = [];
+        $totalProgress = 0;
+        $courseCount = 0;
+        
+        foreach ($data['enrollments']->getCollection() as $enrollment) {
+            if ($enrollment->course) {
+                $course = $enrollment->course;
+                $progress = $data['progressByCourse'][$enrollment->course_id]['percentage'] ?? 0;
+                
+                $totalProgress += $progress;
+                $courseCount++;
+                
+                $progressData[] = [
+                    'course' => $course->title,
+                    'progress' => min($progress, 100),
+                    'viewed' => $data['progressByCourse'][$enrollment->course_id]['viewed'] ?? 0,
+                    'total' => $data['progressByCourse'][$enrollment->course_id]['total'] ?? 0,
+                ];
+            }
+        }
+        
+        $data['overallProgress'] = $courseCount > 0 ? round($totalProgress / $courseCount) : 0;
+        $data['progressData'] = $progressData;
+        $data['totalCourses'] = $courseCount;
+
         return view('admin.student.view', $data);
     }
 
