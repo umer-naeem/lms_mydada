@@ -105,7 +105,7 @@ class CourseController extends Controller
         $authUser = auth()->user();
         $relation = ($authUser) ? getUserRoleRelation($authUser) : NULL;
 
-        if($data['course']->private_mode == 1 && (is_null($authUser) || ($authUser->$relation->organization_id != $data['course']->organization_id && $authUser->id != $data['course']->user_id))){
+        if($data['course']->private_mode == 1 && (is_null($authUser) || ($authUser->$relation && $authUser->$relation->organization_id != $data['course']->organization_id && $authUser->id != $data['course']->user_id))){
             abort(403);
         }
 

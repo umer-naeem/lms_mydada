@@ -26,8 +26,24 @@ class Student
          */
 
         if (file_exists(storage_path('installed'))) {
-            if (in_array(auth()->user()->role, [USER_ROLE_STUDENT, USER_ROLE_INSTRUCTOR, USER_ROLE_ORGANIZATION])) {
-                if (auth()->user()->student->status == STATUS_APPROVED) {
+            $user = auth()->user();
+            
+            if (in_array($user->role, [USER_ROLE_STUDENT, USER_ROLE_INSTRUCTOR, USER_ROLE_ORGANIZATION])) {
+                $allowed = false;
+                
+                // Check based on user role
+                if ($user->role == USER_ROLE_STUDENT) {
+                    // Students must have an approved student record
+                    $allowed = $user->student && $user->student->status == STATUS_APPROVED;
+                } elseif ($user->role == USER_ROLE_INSTRUCTOR) {
+                    // Instructors must have an approved instructor record
+                    $allowed = $user->instructor && $user->instructor->status == STATUS_APPROVED;
+                } elseif ($user->role == USER_ROLE_ORGANIZATION) {
+                    // Organizations must have an approved organization record
+                    $allowed = $user->organization && $user->organization->status == STATUS_APPROVED;
+                }
+                
+                if ($allowed) {
                     return $next($request);
                 } else {
                     if ($request->wantsJson()) {

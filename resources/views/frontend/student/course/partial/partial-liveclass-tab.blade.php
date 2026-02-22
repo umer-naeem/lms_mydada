@@ -150,6 +150,7 @@
                                         <th scope="col">{{ __('Time Duration') }}</th>
                                         <th scope="col">{{ __('Topic') }}</th>
                                         <th scope="col">{{ __('Meeting Host Name') }}</th>
+                                        <th scope="col" class="text-center" style="min-width: 150px;"><i class="fas fa-video"></i> {{ __('Recording') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -169,6 +170,18 @@
                                                 Gmeet
                                             @elseif($past_live_class->meeting_host_name == 'agora')
                                                 Agora In App Video
+                                            @endif
+                                        </td>
+                                        <td class="text-center" style="white-space: nowrap;">
+                                            @php
+                                                $hasRecording = !empty($past_live_class->recording_url) && ($past_live_class->recording_available == 1 || $past_live_class->recording_available === true);
+                                            @endphp
+                                            @if($hasRecording)
+                                                <a href="{{ $past_live_class->recording_url }}" target="_blank" class="theme-btn theme-button1 default-hover-btn btn-sm">
+                                                    <i class="fas fa-video"></i> {{ __('View Recording') }}
+                                                </a>
+                                            @else
+                                                <span class="text-muted"><i class="fas fa-ban"></i> {{ __('No recording available') }}</span>
                                             @endif
                                         </td>
                                     </tr>

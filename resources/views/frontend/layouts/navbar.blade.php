@@ -350,7 +350,7 @@
                                                 <li><a class="dropdown-item" href="{{ route('student.my-learning') }}"><span
                                                             class="iconify" data-icon="akar-icons:book"></span>{{__('My Learning')}}
                                                     </a></li>
-                                                @if(@$authUser->role == USER_ROLE_STUDENT && auth()->user()->student->organization_id != NULL)
+                                                @if(@$authUser->role == USER_ROLE_STUDENT && auth()->user()->student && auth()->user()->student->organization_id != NULL)
                                                     <li>
                                                         <a class="dropdown-item" href="{{ route('student.organization_course') }}"><span class="iconify mr-15" data-icon="ion:log-in-outline"></span>
                                                             {{ __('Organization Course') }}</a>

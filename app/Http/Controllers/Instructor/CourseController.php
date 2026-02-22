@@ -60,10 +60,16 @@ class CourseController extends Controller
     public function organizationCourses()
     {
         $data['title'] = 'Organization Courses';
+        $instructor = auth()->user()->instructor;
+        if (!$instructor || !$instructor->organization_id) {
+            $this->showToastrMessage('error', __('You are not associated with any organization.'));
+            return redirect()->back();
+        }
+        
         $courseInstructorIds = CourseInstructor::query()
             ->join('courses', 'courses.id', '=', 'course_instructor.course_id')
             ->select('user_packages.*')
-            ->where('courses.organization_id', auth()->user()->instructor->organization_id)
+            ->where('courses.organization_id', $instructor->organization_id)
             ->where('course_instructor.status',STATUS_APPROVED)->select('course_id')
             ->groupBy('courses.id')
             ->get()
@@ -74,7 +80,7 @@ class CourseController extends Controller
             ->whereIn('courses.id', $courseInstructorIds)
             ->join('course_instructor', 'course_instructor.course_id', '=', 'courses.id')
             ->where('course_instructor.status',STATUS_APPROVED)
-            ->where('organization_id', auth()->user()->instructor->organization_id)
+            ->where('organization_id', $instructor->organization_id)
             ->groupBy('courses.id')
             ->paginate(10);
         $data['navCourseOrganizationActiveClass'] = 'active';

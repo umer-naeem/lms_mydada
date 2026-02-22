@@ -135,6 +135,8 @@ class LiveClassController extends Controller
             'duration' => 'required',
             'moderator_pw' => 'nullable|min:6',
             'attendee_pw' => 'nullable|min:6',
+            'recording_url' => 'nullable|url',
+            'recording_type' => 'nullable|string|max:50',
         ]);
 
         try {
@@ -154,6 +156,9 @@ class LiveClassController extends Controller
             $class->meeting_id = $request->meeting_host_name == 'jitsi' ? $request->jitsi_meeting_id : $class->id . rand();
             $class->moderator_pw = $request->moderator_pw;
             $class->attendee_pw = $request->attendee_pw;
+            $class->recording_url = $request->recording_url;
+            $class->recording_available = $request->has('recording_available') ? 1 : 0;
+            $class->recording_type = $request->recording_type;
             $class->save();
 
             /** ====== Start:: BigBlueButton create meeting ===== */

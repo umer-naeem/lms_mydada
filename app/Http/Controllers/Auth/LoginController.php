@@ -92,25 +92,27 @@ class LoginController extends Controller
         status 0 = Pending
         */
         if (Auth::attempt($credentials)) {
-            if (Auth::user()->role == USER_ROLE_STUDENT && Auth::user()->student->status == STATUS_REJECTED){
+            $user = Auth::user();
+            
+            if ($user->role == USER_ROLE_STUDENT && $user->student && $user->student->status == STATUS_REJECTED){
                 Auth::logout();
                 $this->showToastrMessage('error', __('Your account has been blocked!'));
                 return redirect("login");
             }
 
-            if (Auth::user()->role == USER_ROLE_STUDENT && Auth::user()->student->account_frozen){
+            if ($user->role == USER_ROLE_STUDENT && $user->student && $user->student->account_frozen){
                 Auth::logout();
                 $this->showToastrMessage('error', __('Your account is frozen. Please contact support.'));
                 return redirect("login");
             }
 
-            if (Auth::user()->role == USER_ROLE_STUDENT && Auth::user()->student->status == STATUS_PENDING){
+            if ($user->role == USER_ROLE_STUDENT && $user->student && $user->student->status == STATUS_PENDING){
                 Auth::logout();
                 $this->showToastrMessage('warning', 'Your account has been in pending status. Please wait until approval.');
                 return redirect("login");
             }
 
-            if (Auth::user()->role == USER_ROLE_INSTRUCTOR && Auth::user()->student->status == STATUS_REJECTED && Auth::user()->instructor->status == STATUS_REJECTED){
+            if ($user->role == USER_ROLE_INSTRUCTOR && $user->student && $user->student->status == STATUS_REJECTED && $user->instructor && $user->instructor->status == STATUS_REJECTED){
                 Auth::logout();
                 $this->showToastrMessage('error', __('Your account has been blocked!'));
                 return redirect("login");
@@ -225,7 +227,7 @@ class LoginController extends Controller
             $student = $user->student;
         }
 
-        if($student->status != STATUS_PENDING){
+        if($student && $student->status != STATUS_PENDING){
             Auth::login($user);
         }
     }

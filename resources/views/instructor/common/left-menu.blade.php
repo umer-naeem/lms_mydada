@@ -4,7 +4,7 @@
             <li><a href="{{route('instructor.dashboard')}}" class="{{active_if_full_match('instructor/dashboard')}} {{ @$navDashboardActiveClass }}"><span class="iconify mr-15" data-icon="feather:home"></span>{{__('Dashboard')}}</a></li>
             <li><a href="{{route('instructor.course.create')}}" class="{{active_if_full_match('instructor/course/create')}} {{ @$navCourseUploadActiveClass }}"><span class="iconify mr-15" data-icon="feather:upload"></span>{{__('Upload Course')}}</a></li>
             <li><a href="{{route('instructor.course')}}" class="{{active_if_full_match('instructor/course')}} {{ @$navCourseActiveClass }}" ><span class="iconify mr-15" data-icon="ion:log-in-outline"></span>{{__('My Courses')}}</a></li>
-            @if(@auth()->user()->instructor->organization_id != NULL)
+            @if(@auth()->user()->instructor && auth()->user()->instructor->organization_id != NULL)
             <li><a href="{{route('instructor.course.organization')}}" class="{{active_if_full_match('instructor/course/organization')}} {{ @$navCourseOrganizationActiveClass }}" ><span class="iconify mr-15" data-icon="ion:log-in-outline"></span>{{__('Organization Courses')}}</a></li>
             @endif
             <li><a href="{{ route('instructor.bundle-course.index') }}" class="{{ @$navBundleCourseActiveClass }}" ><span class="iconify mr-15" data-icon="eos-icons:machine-learning-outlined"></span>{{__('Bundles Courses')}}</a></li>

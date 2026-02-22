@@ -149,6 +149,47 @@
                             </div>
                         @endif
 
+                        <!-- Recording Access Fields -->
+                        <div class="row mb-30">
+                            <div class="col-md-12">
+                                <label class="label-text-title color-heading font-medium font-16 mb-3">{{ __('Recording URL') }}
+                                    <span class="text-muted font-12">({{ __('Optional') }})</span>
+                                </label>
+                                <input type="url" name="recording_url" class="form-control" placeholder="https://zoom.us/rec/share/... or YouTube/Vimeo link" value="{{ old('recording_url') }}">
+                                <small class="text-muted">{{ __('Enter the recording link after the live class ends (Zoom Cloud, YouTube, Vimeo, etc.)') }}</small>
+                                @if ($errors->has('recording_url'))
+                                    <span class="text-danger"><i class="fas fa-exclamation-triangle"></i> {{ $errors->first('recording_url') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row mb-30">
+                            <div class="col-md-6">
+                                <label class="label-text-title color-heading font-medium font-16 mb-3">{{ __('Recording Type') }}
+                                    <span class="text-muted font-12">({{ __('Optional') }})</span>
+                                </label>
+                                <select name="recording_type" class="form-select">
+                                    <option value="">{{ __('Select Recording Type') }}</option>
+                                    <option value="zoom" {{ old('recording_type') == 'zoom' ? 'selected' : '' }}>Zoom Cloud Recording</option>
+                                    <option value="youtube" {{ old('recording_type') == 'youtube' ? 'selected' : '' }}>YouTube</option>
+                                    <option value="vimeo" {{ old('recording_type') == 'vimeo' ? 'selected' : '' }}>Vimeo</option>
+                                    <option value="bbb" {{ old('recording_type') == 'bbb' ? 'selected' : '' }}>BigBlueButton</option>
+                                    <option value="other" {{ old('recording_type') == 'other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                                @if ($errors->has('recording_type'))
+                                    <span class="text-danger"><i class="fas fa-exclamation-triangle"></i> {{ $errors->first('recording_type') }}</span>
+                                @endif
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mt-4 pt-3">
+                                    <input class="form-check-input" type="checkbox" name="recording_available" id="recording_available" value="1" {{ old('recording_available') ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="recording_available">
+                                        {{ __('Recording Available') }}
+                                    </label>
+                                    <small class="d-block text-muted">{{ __('Check this if the recording is ready for students to view') }}</small>
+                                </div>
+                            </div>
+                        </div>
+
                         <div>
                             <a href="{{ route('organization.live-class.index', $course->uuid) }}" class="theme-btn theme-button3 quiz-back-btn default-hover-btn">{{ __('Back') }}</a>
                             <button type="submit" class="theme-btn theme-button1 default-hover-btn">{{ __('Create Meeting') }}</button>

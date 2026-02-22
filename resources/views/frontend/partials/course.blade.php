@@ -36,8 +36,23 @@
     <div class="card-body">
         <h5 class="card-title course-title"><a href="{{ route('course-details', $course->slug) }}">{{ Str::limit($course->title, 40)}}</a></h5>
         <p class="card-text instructor-name-certificate font-medium font-12">
-            <a href="{{ route('userProfile',$course->user->id) }}">{{ $course->$userRelation->name }}</a>
-            @foreach($course->$userRelation->awards as $award) | {{ $award->name }} @endforeach</p>
+            @if($course->user)
+                @php
+                    $relationModel = null;
+                    if (isset($userRelation) && $course->$userRelation) {
+                        $relationModel = $course->$userRelation;
+                    }
+                @endphp
+                @if($relationModel)
+                    <a href="{{ route('userProfile',$course->user->id) }}">{{ $relationModel->name ?? $course->user->name }}</a>
+                    @if(isset($relationModel->awards) && $relationModel->awards && $relationModel->awards->count() > 0)
+                        @foreach($relationModel->awards as $award) | {{ $award->name }} @endforeach
+                    @endif
+                @else
+                    <a href="{{ route('userProfile',$course->user->id) }}">{{ $course->user->name }}</a>
+                @endif
+            @endif
+        </p>
         <div class="course-item-bottom">
             <div
                 class="course-rating search-instructor-rating w-100 mb-15 d-inline-flex align-items-center">

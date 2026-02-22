@@ -397,7 +397,7 @@
                                                                 class="iconify"
                                                                 data-icon="akar-icons:book"></span>{{ __('My Learning') }}
                                                         </a></li>
-                                                    @if (@$authUser->role == USER_ROLE_STUDENT && auth()->user()->student->organization_id != null)
+                                                    @if (@$authUser->role == USER_ROLE_STUDENT && auth()->user()->student && auth()->user()->student->organization_id != null)
                                                         <li>
                                                             <a class="dropdown-item"
                                                                 href="{{ route('student.organization_course') }}"><span

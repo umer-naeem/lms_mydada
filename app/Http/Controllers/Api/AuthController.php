@@ -119,17 +119,17 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = auth()->user();
-            if ($user->role == USER_ROLE_STUDENT && $user->student->status == STATUS_REJECTED){
+            if ($user->role == USER_ROLE_STUDENT && $user->student && $user->student->status == STATUS_REJECTED){
                 Auth::logout();
                 return $this->failed([], __('Your account has been blocked!'));
             }
 
-            if ($user->role == USER_ROLE_STUDENT && $user->student->status == STATUS_PENDING){
+            if ($user->role == USER_ROLE_STUDENT && $user->student && $user->student->status == STATUS_PENDING){
                 Auth::logout();
                 return $this->failed([], __('Your account has been in pending status. Please wait until approval.'));
             }
 
-            if ($user->role == USER_ROLE_INSTRUCTOR && $user->student->status == STATUS_REJECTED && $user->instructor->status == STATUS_REJECTED){
+            if ($user->role == USER_ROLE_INSTRUCTOR && $user->student && $user->student->status == STATUS_REJECTED && $user->instructor && $user->instructor->status == STATUS_REJECTED){
                 Auth::logout();
                 return $this->failed([], __('Your account has been blocked!'));
             }
@@ -195,15 +195,15 @@ class AuthController extends Controller
         }
 
         if ($user) {
-            if ($user->role == USER_ROLE_STUDENT && $user->student->status == STATUS_REJECTED){
+            if ($user->role == USER_ROLE_STUDENT && $user->student && $user->student->status == STATUS_REJECTED){
                 return $this->failed([], __('Your account has been blocked!'));
             }
 
-            if ($user->role == USER_ROLE_STUDENT && $user->student->status == STATUS_PENDING){
+            if ($user->role == USER_ROLE_STUDENT && $user->student && $user->student->status == STATUS_PENDING){
                 return $this->failed([], __('Your account has been in pending status. Please wait until approval.'));
             }
 
-            if ($user->role == USER_ROLE_INSTRUCTOR && $user->student->status == STATUS_REJECTED && $user->instructor->status == STATUS_REJECTED){
+            if ($user->role == USER_ROLE_INSTRUCTOR && $user->student && $user->student->status == STATUS_REJECTED && $user->instructor && $user->instructor->status == STATUS_REJECTED){
                 return $this->failed([], __('Your account has been blocked!'));
             }
             if (get_option('registration_email_verification') == 1){
