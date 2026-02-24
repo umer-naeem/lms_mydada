@@ -135,7 +135,12 @@ class StudentController extends Controller
         $data['attendanceRecords'] = Attendance::where('user_id', $data['student']->user_id)->latest()->take(50)->get();
         $data['assignmentSubmissions'] = AssignmentSubmit::where('user_id', $data['student']->user_id)->latest()->take(50)->get();
         $data['supportTickets'] = Ticket::where('user_id', $data['student']->user_id)->latest()->take(50)->get();
-        $data['devices'] = $data['student']->user ? $data['student']->user->device : collect();
+        // Load devices for login history
+        if ($data['student']->user) {
+            $data['devices'] = $data['student']->user->device()->orderBy('updated_at', 'desc')->get();
+        } else {
+            $data['devices'] = collect();
+        }
         $data['leaveRequests'] = StudentLeaveRequest::where('student_id', $data['student']->id)->latest()->get();
         $data['feedbacks'] = StudentFeedback::where('student_id', $data['student']->id)->latest()->get();
         $data['levelHistories'] = StudentLevelHistory::where('student_id', $data['student']->id)->latest()->get();

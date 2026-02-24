@@ -52,8 +52,8 @@
                                         </td>
                                         <td>
                                             {{__('Name')}}: {{$student->name}}<br>
-                                            {{__('Email')}}: {{$student->user->email}}<br>
-                                            {{__('Phone')}}: {{$student->phone_number ?? @$student->user->phone_number}}<br>
+                                            {{__('Email')}}: {{$student->user ? $student->user->email : __('N/A')}}<br>
+                                            {{__('Phone')}}: {{$student->phone_number ?? ($student->user ? $student->user->phone_number : '')}}<br>
 
                                         </td>
                                         <td>{{$student->country ? $student->country->country_name : '' }}</td>

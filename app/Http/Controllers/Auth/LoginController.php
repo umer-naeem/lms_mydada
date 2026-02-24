@@ -137,6 +137,14 @@ class LoginController extends Controller
                 }
             }
 
+            // Track device on successful login (after all validations pass)
+            try {
+                \DeviceTracker::detectFindAndUpdate();
+            } catch (\Exception $e) {
+                // Silently fail if device tracking has issues
+                \Log::warning('Device tracking failed on login: ' . $e->getMessage());
+            }
+
             if (Auth::user()->is_admin())
             {
                 return redirect(route('admin.dashboard'));
@@ -229,6 +237,14 @@ class LoginController extends Controller
 
         if($student && $student->status != STATUS_PENDING){
             Auth::login($user);
+            
+            // Track device on successful social login
+            try {
+                \DeviceTracker::detectFindAndUpdate();
+            } catch (\Exception $e) {
+                // Silently fail if device tracking has issues
+                \Log::warning('Device tracking failed on social login: ' . $e->getMessage());
+            }
         }
     }
 

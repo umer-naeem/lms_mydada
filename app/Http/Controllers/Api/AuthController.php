@@ -141,6 +141,14 @@ class AuthController extends Controller
                 }
             }
 
+            // Track device on successful login
+            try {
+                \DeviceTracker::detectFindAndUpdate();
+            } catch (\Exception $e) {
+                // Silently fail if device tracking has issues
+                \Log::warning('Device tracking failed on API login: ' . $e->getMessage());
+            }
+
             $response['token'] = $user->createToken(Str::random(32))->accessToken;
 
             return $this->success($response, __('Successfully Logged In'));
@@ -211,6 +219,14 @@ class AuthController extends Controller
                 if (!$check){
                     return $this->failed([], __('Your email is not verified!'));
                 }
+            }
+
+            // Track device on successful social login
+            try {
+                \DeviceTracker::detectFindAndUpdate();
+            } catch (\Exception $e) {
+                // Silently fail if device tracking has issues
+                \Log::warning('Device tracking failed on API social login: ' . $e->getMessage());
             }
 
             $response['token'] = $user->createToken(Str::random(32))->accessToken;

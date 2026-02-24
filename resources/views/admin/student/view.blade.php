@@ -557,10 +557,24 @@
                                     </thead>
                                     <tbody>
                                     @forelse($devices as $device)
+                                        @php
+                                            $deviceData = $device->data ?? [];
+                                            $deviceType = $device->device_type ?? '';
+                                            // Device type format is usually "OS|Browser" or just the type
+                                            $parts = explode('|', $deviceType);
+                                            $os = $parts[0] ?? $deviceType;
+                                            $browser = $parts[1] ?? '';
+                                        @endphp
                                         <tr>
-                                            <td>{{ $device->device_type ?? __('N/A') }}</td>
+                                            <td>
+                                                @if($browser)
+                                                    {{ $os }} / {{ $browser }}
+                                                @else
+                                                    {{ $deviceType ?: __('N/A') }}
+                                                @endif
+                                            </td>
                                             <td>{{ $device->ip ?? __('N/A') }}</td>
-                                            <td>{{ $device->updated_at?->format('Y-m-d H:i') }}</td>
+                                            <td>{{ $device->updated_at ? $device->updated_at->format('Y-m-d H:i:s') : __('N/A') }}</td>
                                         </tr>
                                     @empty
                                         <tr><td colspan="3" class="text-center">{{ __('No login history found.') }}</td></tr>
